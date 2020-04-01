@@ -21,7 +21,7 @@ public class MainPageSteps {
         String title = driver.getTitle();
         Assert.assertEquals(title, "Lanit education", "Test not complited");
         System.out.println("Test openedBrowserAndEnteredUrl complited");
-        Thread.sleep(2000);
+
     }
 
     @И("переходим в раздел Категории")
@@ -31,7 +31,7 @@ public class MainPageSteps {
         String title = driver.getTitle();
         Assert.assertEquals(title, "Категории | Lanit education", "Test goToCategories not complited");
         System.out.println("Test goToCategories complited");
-        Thread.sleep(2000);
+
     }
 
     @И("переходим в раздел Пользователи")
@@ -41,7 +41,7 @@ public class MainPageSteps {
         String title = driver.getTitle();
         Assert.assertEquals(title, "Top posters | Пользователи | Lanit education", "Test goToUsers not complited");
         System.out.println("Test goToUsers complited");
-        Thread.sleep(2000);
+
 
     }
 
@@ -56,7 +56,6 @@ public class MainPageSteps {
         String title = driver.getTitle();
         Assert.assertEquals(title, "Поиск по сайту | Lanit education", "Test searchForUserFromPrecondition not complited");
         System.out.println("Test searchForUserFromPrecondition complited");
-        Thread.sleep(2000);
     }
 
     private void checkFieldsZero(String id){
@@ -64,7 +63,6 @@ public class MainPageSteps {
         WebElement fieldParrent = field.findElement(By.xpath(".."));
         String fielsError = fieldParrent.findElement(By.cssSelector("p")).getText();
         Assert.assertEquals(fielsError, "Это поле обязательно.", "Test registratedZeroField not complited");
-
     }
 
     @Тогда("пробуем выполнить регистрацию с пустыми полями")
@@ -98,7 +96,7 @@ public class MainPageSteps {
     @Тогда("пробуем выполнить регистрацию существующем пользователем")
     public void registratedExistingUser() throws InterruptedException {
         fillFields("id_username","kuvaldinvitaly");
-        Thread.sleep(2000);
+        Thread.sleep(500);
         Random random = new Random();
         int n = random.nextInt(100) + 1;
         String email = "kuvaldinvitaly" + n + "@gmail.com";
@@ -118,7 +116,7 @@ public class MainPageSteps {
     public void redistratedNewUser() throws InterruptedException {
         WebElement webElement = driver.findElement(By.xpath("//*[@class=\"btn navbar-btn btn-primary btn-register\"]"));
         webElement.click();
-        Thread.sleep(1000);
+        Thread.sleep(500);
         Random random = new Random();
         int n = random.nextInt(10000) - 1;
         fillFields("id_username","TestUser" + n);
@@ -127,13 +125,13 @@ public class MainPageSteps {
         fillFields("id_password", n + "veryhardpassword");
         WebElement webElement1 = driver.findElement(By.xpath("//*[@class=\"btn btn-primary\"]"));
         webElement1.click();
-        Thread.sleep(2000);
-        String reloadPage = driver.findElement(By.xpath("//button[contains(text(),'Обновите страницу')]")).getText();
-        Assert.assertEquals("Обновите страницу", reloadPage, "Test redistratedNewUser not complited");
+        WebDriverWait webDriverWait = new WebDriverWait(driver, 10);
+        webDriverWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("[class=\"lead\"]")));
+        String reloadPage = driver.findElement(By.xpath("//*[@class=\"lead\"]")).getText();
+        Assert.assertTrue(reloadPage.contains("Вы вошли как"), "Test redistratedNewUser not complited");
         WebElement webElement3 = driver.findElement(By.xpath("//button[contains(text(),'Обновите страницу')]"));
         webElement3.click();
         System.out.println("Test redistratedNewUser complited");
-
     }
 
     @Тогда("завершаем тест")
